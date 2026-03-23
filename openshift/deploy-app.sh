@@ -26,9 +26,9 @@ fi
 
 # Check if images exist
 echo "Checking if images exist..."
-oc get imagestream ambient-api -n $NAMESPACE &>/dev/null || { echo "ERROR: ambient-api image not found. Run ./deploy/build-images.sh first"; exit 1; }
-oc get imagestream ambient-ui -n $NAMESPACE &>/dev/null || { echo "ERROR: ambient-ui image not found. Run ./deploy/build-images.sh first"; exit 1; }
-oc get imagestream ambient-nginx -n $NAMESPACE &>/dev/null || { echo "ERROR: ambient-nginx image not found. Run ./deploy/build-images.sh first"; exit 1; }
+oc get imagestream ambient-api -n $NAMESPACE &>/dev/null || { echo "ERROR: ambient-api image not found. Run ./openshift/build-images.sh first"; exit 1; }
+oc get imagestream ambient-ui -n $NAMESPACE &>/dev/null || { echo "ERROR: ambient-ui image not found. Run ./openshift/build-images.sh first"; exit 1; }
+oc get imagestream ambient-nginx -n $NAMESPACE &>/dev/null || { echo "ERROR: ambient-nginx image not found. Run ./openshift/build-images.sh first"; exit 1; }
 
 # Install Helm chart
 echo "Installing Helm chart..."

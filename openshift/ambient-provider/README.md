@@ -6,7 +6,7 @@ Deploy NVIDIA Ambient Provider on OpenShift using cloud NIMs.
 
 1. **Images built** (see Step 1 in main README)
    ```bash
-   ./deploy/build-images.sh
+   ./openshift/build-images.sh
    ```
 
 2. **NVIDIA API Key** from https://build.nvidia.com/ (ensure **Cloud Functions** is included in key scopes if using cloud Riva)
@@ -19,7 +19,7 @@ Deploy NVIDIA Ambient Provider on OpenShift using cloud NIMs.
 
 ```bash
 # Install with API key and Riva function ID (required for cloud Riva)
-helm install ambient-provider ./deploy/ambient-provider \
+helm install ambient-provider ./openshift/ambient-provider \
   --namespace fax \
   --set nvidia.apiKey='nvapi-your-key-here' \
   --set nvidia.rivaFunctionId='<your-riva-function-id>'
@@ -33,7 +33,7 @@ oc get route ambient-provider-ambient-provider -n fax -o jsonpath='{.spec.host}'
 ### Basic Configuration
 
 ```bash
-helm install ambient-provider ./deploy/ambient-provider \
+helm install ambient-provider ./openshift/ambient-provider \
   --namespace fax \
   --set nvidia.apiKey='nvapi-xxx' \
   --set images.namespace=fax
@@ -56,7 +56,7 @@ replicaCount:
 
 Install:
 ```bash
-helm install ambient-provider ./deploy/ambient-provider \
+helm install ambient-provider ./openshift/ambient-provider \
   --namespace fax \
   -f my-values.yaml
 ```
@@ -108,7 +108,7 @@ oc logs -f deployment/ambient-provider-ambient-provider-api -n fax
 
 ```bash
 # Cloud Riva (default): API key + Riva function ID required
-helm upgrade ambient-provider ./deploy/ambient-provider \
+helm upgrade ambient-provider ./openshift/ambient-provider \
   --namespace fax \
   --set nvidia.apiKey="$NVIDIA_API_KEY" \
   --set nvidia.rivaFunctionId="$RIVA_FUNCTION_ID" \

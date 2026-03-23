@@ -41,10 +41,10 @@ oc new-project nvidia-nim
 export NGC_API_KEY='your-ngc-api-key-here'
 
 # Deploy to default namespace (nvidia-nim)
-./deploy/nims/deploy-nims.sh
+./openshift/nims/deploy-nims.sh
 
 # Or deploy to custom namespace
-NIM_NAMESPACE=my-nims ./deploy/nims/deploy-nims.sh
+NIM_NAMESPACE=my-nims ./openshift/nims/deploy-nims.sh
 ```
 
 The script will:
@@ -75,8 +75,8 @@ oc create secret docker-registry ngc-secret \
   -n nvidia-nim
 
 # Deploy NIMs
-oc apply -f deploy/nims/parakeet-nim.yaml
-oc apply -f deploy/nims/llama-nim.yaml
+oc apply -f openshift/nims/parakeet-nim.yaml
+oc apply -f openshift/nims/llama-nim.yaml
 ```
 
 **Note:** Adjust GPU count in `llama-nim.yaml` based on your available resources before deploying.

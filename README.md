@@ -615,7 +615,7 @@ make dev-ui
 
 ```bash
 # Option 1: Use the build script (recommended)
-./deploy/build-images.sh
+./openshift/build-images.sh
 
 # Option 2: Manual build commands
 oc new-project ambient-provider
@@ -649,10 +649,10 @@ If you want to run NIMs locally on your OpenShift cluster instead of using cloud
 export NGC_API_KEY='your-ngc-api-key'
 
 # Deploy NIMs (default namespace: nvidia-nim)
-./deploy/nims/deploy-nims.sh
+./openshift/nims/deploy-nims.sh
 
 # Or deploy to custom namespace
-NIM_NAMESPACE=my-namespace ./deploy/nims/deploy-nims.sh
+NIM_NAMESPACE=my-namespace ./openshift/nims/deploy-nims.sh
 
 # Monitor deployment
 oc get nimservice -n nvidia-nim
@@ -661,7 +661,7 @@ oc get pods -n nvidia-nim -w
 
 **Note:** Requires NVIDIA GPU Operator and NIM Operator installed, plus sufficient GPU resources.
 
-See [deploy/nims/README.md](deploy/nims/README.md) for detailed instructions.
+See [openshift/nims/README.md](openshift/nims/README.md) for detailed instructions.
 
 ### Deploy Application with Helm
 
@@ -672,10 +672,10 @@ Deploy the application using cloud NIMs (requires NVIDIA API key from build.nvid
 export NVIDIA_API_KEY='nvapi-your-key-here'
 
 # Deploy with automatic script
-./deploy/deploy-app.sh
+./openshift/deploy-app.sh
 
 # Or deploy manually with Helm
-helm install ambient-provider ./deploy/ambient-provider \
+helm install ambient-provider ./openshift/ambient-provider \
   --namespace fax \
   --set nvidia.apiKey="$NVIDIA_API_KEY"
 
@@ -683,7 +683,7 @@ helm install ambient-provider ./deploy/ambient-provider \
 oc get route ambient-provider-ambient-provider -n fax -o jsonpath='{.spec.host}'
 ```
 
-See [deploy/ambient-provider/README.md](deploy/ambient-provider/README.md) for detailed configuration options.
+See [openshift/ambient-provider/README.md](openshift/ambient-provider/README.md) for detailed configuration options.
 
 ---
 
