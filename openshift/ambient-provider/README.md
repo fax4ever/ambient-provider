@@ -4,7 +4,7 @@ Deploy NVIDIA Ambient Provider on OpenShift using cloud NIMs.
 
 ## Prerequisites
 
-1. **Images built** (see Step 1 in main README)
+1. **Images built** (see [../README.md](../README.md) — Build images on OpenShift)
    ```bash
    ./openshift/build-images.sh
    ```
@@ -73,6 +73,7 @@ helm install ambient-provider ./openshift/ambient-provider \
 | `images.namespace` | Namespace where images were built | `fax` |
 | `route.enabled` | Create OpenShift Route | `true` |
 | `replicaCount.api` | API replicas | `1` |
+| `ui.viteUseStreaming` | Sets pod env `VITE_USE_STREAMING` for the Vite UI (`true` / `false`) | `false` |
 
 ## Get Riva function ID
 

@@ -609,85 +609,11 @@ make dev-ui
 
 # Production Deployment
 
-## OpenShift / Kubernetes Deployment
+## OpenShift / Kubernetes
 
-### Build Images on OpenShift
+For building images on OpenShift, optional in-cluster NIMs, and Helm deployment, see [openshift/README.md](openshift/README.md).
 
-```bash
-# Option 1: Use the build script (recommended)
-./openshift/build-images.sh
-
-# Option 2: Manual build commands
-oc new-project ambient-provider
-
-# Build API
-oc new-build --name=ambient-api --binary --strategy=docker
-cp ambient-scribe/infra/docker/api.Dockerfile ./Dockerfile
-oc start-build ambient-api --from-dir=. --follow
-rm ./Dockerfile
-
-# Build UI
-oc new-build --name=ambient-ui --binary --strategy=docker
-cp ambient-scribe/infra/docker/ui.Dockerfile ./Dockerfile
-oc start-build ambient-ui --from-dir=. --follow
-rm ./Dockerfile
-
-# Build Nginx
-oc new-build --name=ambient-nginx --binary --strategy=docker
-cd ambient-scribe/infra
-cp docker/nginx.ubuntu.Dockerfile ./Dockerfile
-oc start-build ambient-nginx --from-dir=. --follow
-rm ./Dockerfile
-```
-
-### Deploy NIMs with NVIDIA NIM Operator (Optional - Local NIMs)
-
-If you want to run NIMs locally on your OpenShift cluster instead of using cloud NIMs:
-
-```bash
-# Set your NGC API key
-export NGC_API_KEY='your-ngc-api-key'
-
-# Deploy NIMs (default namespace: nvidia-nim)
-./openshift/nims/deploy-nims.sh
-
-# Or deploy to custom namespace
-NIM_NAMESPACE=my-namespace ./openshift/nims/deploy-nims.sh
-
-# Monitor deployment
-oc get nimservice -n nvidia-nim
-oc get pods -n nvidia-nim -w
-```
-
-**Note:** Requires NVIDIA GPU Operator and NIM Operator installed, plus sufficient GPU resources.
-
-See [openshift/nims/README.md](openshift/nims/README.md) for detailed instructions.
-
-### Deploy Application with Helm
-
-Deploy the application using cloud NIMs (requires NVIDIA API key from build.nvidia.com):
-
-```bash
-# Set your NVIDIA API key (nvapi-xxx from build.nvidia.com)
-export NVIDIA_API_KEY='nvapi-your-key-here'
-
-# Deploy with automatic script
-./openshift/deploy-app.sh
-
-# Or deploy manually with Helm
-helm install ambient-provider ./openshift/ambient-provider \
-  --namespace fax \
-  --set nvidia.apiKey="$NVIDIA_API_KEY"
-
-# Get the application URL
-oc get route ambient-provider-ambient-provider -n fax -o jsonpath='{.spec.host}'
-```
-
-See [openshift/ambient-provider/README.md](openshift/ambient-provider/README.md) for detailed configuration options.
-
----
-
-## Docker Compose Production Setup
+## Production Setup
 
 ####  1. **Build production images**:
    ```bash

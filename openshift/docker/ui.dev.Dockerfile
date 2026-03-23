@@ -30,6 +30,10 @@ RUN npm install --force
 # Copy source code
 COPY apps/ui ./
 
+# OpenShift runs containers as an arbitrary non-root UID; make /app writable so
+# Vite can write cache to node_modules/.vite and any other runtime writes succeed
+RUN chmod -R a+w /app
+
 # Expose Vite dev server port
 EXPOSE 5173
 

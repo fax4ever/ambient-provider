@@ -109,12 +109,17 @@ async def transcribe_audio_file(
             print(f"Using self-hosted Riva URI: {settings.riva_uri}")
             auth = riva.client.Auth(uri=settings.riva_uri)
         else:
+            if not (settings.riva_function_id or "").strip():
+                raise ValueError(
+                    "RIVA_FUNCTION_ID is required for cloud Riva. "
+                    "Set it in your environment or .env, or use self-hosted Riva (SELF_HOSTED=true)."
+                )
             print(f"Using NVIDIA Riva URI: {settings.riva_uri}")
             auth = riva.client.Auth(
-                uri=settings.riva_uri, 
-                use_ssl=True, 
+                uri=settings.riva_uri,
+                use_ssl=True,
                 metadata_args=[
-                    ["function-id", settings.riva_function_id],
+                    ["function-id", settings.riva_function_id.strip()],
                     ["authorization", f"Bearer {settings.nvidia_api_key}"]
                 ]
             )
@@ -203,12 +208,17 @@ async def stream_transcribe_audio_file(
             print(f"Using self-hosted Riva URI for streaming: {settings.riva_uri}")
             auth = riva.client.Auth(uri=settings.riva_uri)
         else:
+            if not (settings.riva_function_id or "").strip():
+                raise ValueError(
+                    "RIVA_FUNCTION_ID is required for cloud Riva. "
+                    "Set it in your environment or .env, or use self-hosted Riva (SELF_HOSTED=true)."
+                )
             print(f"Using NVIDIA Riva URI for streaming: {settings.riva_uri}")
             auth = riva.client.Auth(
-                uri=settings.riva_uri, 
-                use_ssl=True, 
+                uri=settings.riva_uri,
+                use_ssl=True,
                 metadata_args=[
-                    ["function-id", settings.riva_function_id],
+                    ["function-id", settings.riva_function_id.strip()],
                     ["authorization", f"Bearer {settings.nvidia_api_key}"]
                 ]
             )

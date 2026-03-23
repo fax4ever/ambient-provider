@@ -76,6 +76,10 @@ service:
   nginx:
     port: 80
 
+# UI (Vite dev server): injected as VITE_USE_STREAMING at runtime (see templates/ui-deployment.yaml)
+ui:
+  viteUseStreaming: false
+
 # Route (OpenShift external access)
 route:
   enabled: true

@@ -21,7 +21,7 @@ import { Volume2, FileText } from 'lucide-react'
 function App() {
   // Configuration - toggle between streaming and offline transcription
   // Read from environment variable, default to true if not set
-  const useStreaming = import.meta.env.VITE_USE_STREAMING === 'true'
+  const useStreaming = import.meta.env.VITE_USE_STREAMING !== 'false'
   
   // State management
   const [transcript, setTranscript] = useState<Transcript | null>(null)

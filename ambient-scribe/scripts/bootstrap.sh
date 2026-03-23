@@ -107,7 +107,7 @@ setup_environment() {
         log_info "Creating UI environment file..."
         cat > apps/ui/.env << 'EOF'
 # Frontend Environment Variables for Ambient Scribe UI
-VITE_USE_STREAMING=false
+VITE_USE_STREAMING=true
 EOF
         log_success "UI environment file created"
     else

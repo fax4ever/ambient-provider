@@ -36,10 +36,14 @@ build_api() {
     if ! oc get bc ambient-api &>/dev/null; then
         oc new-build --name=ambient-api --binary --strategy=docker || { echo "ERROR: Failed to create BuildConfig for API"; exit 1; }
     fi
+    local asr="$REPO_ROOT/ambient-scribe/apps/api/ambient_scribe/services/asr.py"
     cd "$REPO_ROOT/ambient-scribe"
-    cp infra/docker/api.Dockerfile ./Dockerfile || { echo "ERROR: Failed to copy API Dockerfile"; exit 1; }
-    oc start-build ambient-api --from-dir=. --follow || { echo "ERROR: API build failed"; exit 1; }
+    cp "$asr" "${asr}.bak"
+    cp "$REPO_ROOT/openshift/patches/ambient_scribe/services/asr.py" "$asr"
+    cp "$REPO_ROOT/openshift/docker/api.Dockerfile" ./Dockerfile || { mv "${asr}.bak" "$asr"; echo "ERROR: Failed to copy API Dockerfile"; exit 1; }
+    oc start-build ambient-api --from-dir=. --follow || { rm -f ./Dockerfile; mv "${asr}.bak" "$asr"; echo "ERROR: API build failed"; exit 1; }
     rm ./Dockerfile
+    mv "${asr}.bak" "$asr"
 }
 
 build_ui() {
@@ -47,10 +51,24 @@ build_ui() {
     if ! oc get bc ambient-ui &>/dev/null; then
         oc new-build --name=ambient-ui --binary --strategy=docker || { echo "ERROR: Failed to create BuildConfig for UI"; exit 1; }
     fi
+    local vite="$REPO_ROOT/ambient-scribe/apps/ui/vite.config.ts"
     cd "$REPO_ROOT/ambient-scribe"
-    cp infra/docker/ui.dev.Dockerfile ./Dockerfile || { echo "ERROR: Failed to copy UI Dockerfile"; exit 1; }
-    oc start-build ambient-ui --from-dir=. --follow || { echo "ERROR: UI build failed"; exit 1; }
+    cp "$vite" "${vite}.bak"
+    python3 -c "
+from pathlib import Path
+p = Path(r'''$vite''')
+t = p.read_text()
+if '.openshift.com' not in t:
+    t = t.replace(
+        \"allowedHosts: ['.ngrok-free.app', '.brevlab.com']\",
+        \"allowedHosts: ['.ngrok-free.app', '.brevlab.com', '.openshift.com']\",
+    )
+    p.write_text(t)
+"
+    cp "$REPO_ROOT/openshift/docker/ui.dev.Dockerfile" ./Dockerfile || { mv "${vite}.bak" "$vite"; echo "ERROR: Failed to copy UI Dockerfile"; exit 1; }
+    oc start-build ambient-ui --from-dir=. --follow || { rm -f ./Dockerfile; mv "${vite}.bak" "$vite"; echo "ERROR: UI build failed"; exit 1; }
     rm ./Dockerfile
+    mv "${vite}.bak" "$vite"
 }
 
 build_nginx() {

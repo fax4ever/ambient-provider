@@ -61,7 +61,8 @@ COPY apps/api /app
 
 # Create necessary directories
 RUN mkdir -p /app/uploads /app/logs /tmp/numba_cache && \
-    chown -R appuser:appuser /app /tmp/numba_cache
+    chown -R appuser:appuser /app /tmp/numba_cache && \
+    chmod -R a+w /app/uploads /app/logs /tmp/numba_cache
 
 # Set environment variables to prevent librosa/numba caching issues
 ENV NUMBA_CACHE_DIR=/tmp/numba_cache

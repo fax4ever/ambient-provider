@@ -32,6 +32,8 @@ spec:
           value: "/api"
         - name: VITE_API_PROXY_TARGET
           value: "http://{{ include "ambient-provider.fullname" . }}-api:{{ .Values.service.api.port }}"
+        - name: VITE_USE_STREAMING
+          value: {{ .Values.ui.viteUseStreaming | quote }}
         volumeMounts:
         - name: vite-cache
           mountPath: /app/node_modules/.vite
